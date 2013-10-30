@@ -1,6 +1,32 @@
 Depot::Application.routes.draw do
-  resources :users
+  get "admin/index"
+  get "sessions/new"
+  get "sessions/create"
+  get "sessions/destroy"
 
+  get 'admin' => 'admin#index'
+
+controller :sessions do
+ get 'login' => :new
+ post 'login' => :create
+ delete 'logout' => :destroy
+end
+
+scope '(:locale)' do
+resources :users
+resources :orders
+resources :line_items
+resources :carts
+resources :products do
+  get :who_bought, :on => :member
+end
+root :to => 'store#index', :as => 'store'
+end
+
+
+
+  resources :users
+ 
   resources :orders
 
   resources :line_items
@@ -14,7 +40,7 @@ resources :products
 
   # You can have the root of your site routed with "root"
   # root 'welcome#index'
-  root :to => 'store#index', :as => 'store'
+
 
 
   # Example of regular route:
@@ -38,31 +64,5 @@ resources :products
   #     end
   #   end
 
-  # Example resource route with sub-resources:
-  #   resources :products do
-  #     resources :comments, :sales
-  #     resource :seller
-  #   end
-
-  # Example resource route with more complex sub-resources:
-  #   resources :products do
-  #     resources :comments
-  #     resources :sales do
-  #       get 'recent', on: :collection
-  #     end
-  #   end
-  
-  # Example resource route with concerns:
-  #   concern :toggleable do
-  #     post 'toggle'
-  #   end
-  #   resources :posts, concerns: :toggleable
-  #   resources :photos, concerns: :toggleable
-
-  # Example resource route within a namespace:
-  #   namespace :admin do
-  #     # Directs /admin/products/* to Admin::ProductsController
-  #     # (app/controllers/admin/products_controller.rb)
-  #     resources :products
-  #   end
+  #
 end
